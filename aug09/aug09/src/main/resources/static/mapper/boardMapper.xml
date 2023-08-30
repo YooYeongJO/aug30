@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jose1593.web.dao.BoardDAO">
+
+	<select id="boardList" resultType="BoardDTO">
+		SELECT ff.*, m.m_name  
+		FROM(SELECT @ROWNUM:=@ROWNUM+1 AS rowNum, bb.*, (SELECT COUNT(*) FROM board WHERE bdel=1) AS COUNT
+   				FROM (SELECT  b.bno, b.btitle, b.bdate, b.blike, b.bdel, b.m_no 
+   				FROM board b) bb, (SELECT @ROWNUM:=0) AS R
+   			WHERE bdel=1
+   			ORDER BY bb.bno ASC) as ff join members m on ff.m_no = m.m_no 
+		order by bno desc
+		LIMIT 0, 10
+	</select>
+	
+	<!-- SELECT *을 사용하면 쓸모없는 내용까지 불러와서 일일히 입력해준다. -->
+	
+	<select id="detail" parameterType="Integer" resultType="BoardDTO">	
+		SELECT bcontent, uuid, bip FROM boardview WHERE bno=#{bno }
+	</select>
+
+ 	<insert id="write" parameterType="BoardDTO">  <!--INSERT문은 resultType이 필요없다 -->
+		INSERT INTO board ( btitle, bcontent, m_no, bip, uuid )
+		VALUES(#{btitle }, #{bcontent }, (SELECT m_no FROM members WHERE m_id=#{m_id }), #{bip }, #{uuid })
+	</insert>
+	
+	<update id="readUP" parameterType="Integer">
+		UPDATE board SET blike = blike + 1 WHERE bno=#{bno }
+	</update>
+	
+	<select id="detail2" parameterType="Integer" resultType="BoardDTO">	
+		SELECT * FROM boardview WHERE bno=#{bno }
+	</select>
+	
+	
+	
+</mapper>

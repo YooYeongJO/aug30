@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.14'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+	
+	implementation 'javax.servlet:jstl:1.2'//jsp
+	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"//tomcat사용하기
+	// implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'//DB
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+	//runtime시에만 필요, 실행환경에서 제공되는 dependency를 설정
+	implementation 'org.json:json:20230227'
+	// log
+   implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+   
+   // 이메일 보내기
+   implementation 'org.apache.commons:commons-email:1.5'
+   // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+   
+   //문서화 하기 2023-08-30 파이선 프로그래밍
+   implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+   implementation 'io.springfox:springfox-swagger2:2.9.2'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
